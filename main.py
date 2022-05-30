@@ -15,6 +15,11 @@ height = 60
 # задаем скорость передвижения нашего объекта
 speed = 5
 
+# создаем прыжок
+isJump = False
+jumpCount = 10
+
+
 run = True # переменная которая обозначает должна ли программа сейчас работать
 while run:
     pygame.time.delay(30) # через какой промежуток времени цикл повторяется: чем меньше => тем лучше
@@ -35,10 +40,34 @@ while run:
         x -= speed
     if keys[pygame.K_RIGHT] and x < 500 - width - 5:
         x += speed
-    if keys[pygame.K_UP] and y > 5:
-        y -= speed
-    if keys[pygame.K_DOWN] and y < 500 - height - 5:
-        y += speed
+    if not(isJump):
+        if keys[pygame.K_UP] and y > 5:
+            y -= speed
+        if keys[pygame.K_DOWN] and y < 500 - height - 5:
+            y += speed
+        if keys[pygame.K_SPACE]:
+            isJump = True
+    else:
+        if jumpCount >= -10:
+            if jumpCount < 0:
+                y += (jumpCount ** 2) / 2
+            else:
+                y -= (jumpCount ** 2) / 2
+            jumpCount -= 1
+            print(x, y, jumpCount)
+        else:
+            isJump = False
+            jumpCount = 10
+            print(x, y)
+
+    # код для прыжка
+    # Прыжок является параболлой, поэтому состоит из
+    # повышение и падение
+    # падение начинается на середине прыжка, поэтому мы ждем
+    # когда jumpCount станет на середине своего диапазона
+    # и начинаем опускать
+
+
 
     # при добавлении границ важно понимать, что отсчет у всего идет с левого верхнего угла
     win.fill((0, 0, 0)) # а тут в конце мы просто делаем фон
